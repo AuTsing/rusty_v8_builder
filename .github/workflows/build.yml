@@ -14,6 +14,9 @@ jobs:
               run: |
                   version=$(cat ./README.md | grep -oP 'v\d+\.\d+\.\d+')
                   echo "version=$version" >> $GITHUB_ENV
-            - name: Check Version
+            - name: Checkout Source Code
+              if: ${{ env.version }}
               run: |
-                  echo ${{ env.version }}
+                  git clone https://github.com/denoland/rusty_v8
+                  cd rusty_v8
+                  git checkout ${{ env.version }}
