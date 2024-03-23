@@ -12,7 +12,7 @@ jobs:
                   fetch-depth: 0
             - name: Get Version
               run: |
-                  version=$(cat ./README.md | grep -o "v.*")
+                  version=$(cat ./README.md | grep -oP 'v\d+\.\d+\.\d+')
                   echo $version
               #   echo "version=$version" >> $GITHUB_ENV
             # - name: Check Version
