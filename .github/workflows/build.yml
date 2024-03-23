@@ -13,7 +13,7 @@ jobs:
             - name: Get Version
               run: |
                   version=$(cat ./README.md | grep -o "v.*")
-                  echo version
+                  echo $version
               #   echo "version=$version" >> $GITHUB_ENV
             # - name: Check Version
             #   run: |
