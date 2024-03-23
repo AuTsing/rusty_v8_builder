@@ -17,6 +17,7 @@ jobs:
             - name: Checkout Source Code
               if: ${{ env.version }}
               run: |
-                  git clone https://github.com/denoland/rusty_v8
+                  git clone --recursive https://github.com/denoland/rusty_v8
                   cd rusty_v8
                   git checkout ${{ env.version }}
+                  git submodule update
