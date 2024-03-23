@@ -21,10 +21,12 @@ jobs:
                   cd rusty_v8
                   git checkout ${{ env.version }}
                   git submodule update
-            - name: Install rust
+            - name: Install Rust
               uses: dsherret/rust-toolchain-file@v1
-            - name: Install python
+              working-directory: rusty_v8
+            - name: Install Python
               uses: actions/setup-python@v4
+              working-directory: rusty_v8
               with:
                   python-version: 3.11.x
                   architecture: x64
