@@ -13,8 +13,7 @@ jobs:
             - name: Get Version
               run: |
                   version=$(cat ./README.md | grep -oP 'v\d+\.\d+\.\d+')
-                  echo $version
-              #   echo "version=$version" >> $GITHUB_ENV
-            # - name: Check Version
-            #   run: |
-            #       echo ${{ env.version }}
+                  echo "version=$version" >> $GITHUB_ENV
+            - name: Check Version
+              run: |
+                  echo ${{ env.version }}
