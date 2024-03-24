@@ -38,6 +38,5 @@ jobs:
                   architecture: x64
 
             - name: Test
-              run: |
-                  cargo test -vv --all-targets --locked ${{ env.CARGO_VARIANT_FLAG }}
-                    --target ${{ env.TARGET }}
+              run: cargo test -vv --all-targets --locked ${{ env.CARGO_VARIANT_FLAG }}
+                  --target ${{ env.TARGET }}
