@@ -5,6 +5,12 @@ on: [push]
 jobs:
     build:
         runs-on: ubuntu-22.04
+
+        env:
+            # V8_FROM_SOURCE: 1
+            CARGO_VARIANT_FLAG: --release
+            TARGET: x86_64-unknown-linux-gnu
+
         steps:
             - name: Checkout To Self Repo
               uses: actions/checkout@v4
@@ -30,3 +36,8 @@ jobs:
               with:
                   python-version: 3.11.x
                   architecture: x64
+
+            - name: Test
+              run: |
+                  cargo test -vv --all-targets --locked ${{ env.CARGO_VARIANT_FLAG }}
+                    --target ${{ env.TARGET }}
