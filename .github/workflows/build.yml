@@ -19,4 +19,14 @@ jobs:
               with:
                   repository: denoland/rusty_v8
                   ref: ${{ env.version }}
+                  fetch-depth: 10
                   submodules: recursive
+
+            - name: Install Rust
+              uses: dsherret/rust-toolchain-file@v1
+
+            - name: Install Python
+              uses: actions/setup-python@v4
+              with:
+                  python-version: 3.11.x
+                  architecture: x64
