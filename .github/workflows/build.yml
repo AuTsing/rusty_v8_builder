@@ -9,24 +9,5 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v4
               with:
-                  fetch-depth: 0
-            - name: Get Version
-              run: |
-                  version=$(cat ./README.md | grep -oP 'v\d+\.\d+\.\d+')
-                  echo "version=$version" >> $GITHUB_ENV
-            - name: Checkout Source Code
-              if: ${{ env.version }}
-              run: |
-                  git clone --recursive https://github.com/denoland/rusty_v8
-                  cd rusty_v8
-                  git checkout ${{ env.version }}
-                  git submodule update
-            - name: Install Rust
-              uses: dsherret/rust-toolchain-file@v1
-              working-directory: rusty_v8
-            - name: Install Python
-              uses: actions/setup-python@v4
-              working-directory: rusty_v8
-              with:
-                  python-version: 3.11.x
-                  architecture: x64
+                  repository: denoland/rusty_v8
+                  ref: main
