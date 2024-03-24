@@ -6,8 +6,16 @@ jobs:
     build:
         runs-on: ubuntu-22.04
         steps:
-            - name: Checkout
+            - name: Checkout To Self Repo
+              uses: actions/checkout@v4
+
+            - name: Get Version
+              run: |
+                  version=$(cat ./README.md | grep -oP 'v\d+\.\d+\.\d+')
+                  echo "version=$version" >> $GITHUB_ENV
+
+            - name: Checkout To V8 Repo
               uses: actions/checkout@v4
               with:
                   repository: denoland/rusty_v8
-                  ref: main
+                  ref: ${{ env.version }}
