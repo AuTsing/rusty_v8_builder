@@ -19,4 +19,4 @@ jobs:
               with:
                   repository: denoland/rusty_v8
                   ref: ${{ env.version }}
-                  submodule: recursive
+                  submodules: recursive
