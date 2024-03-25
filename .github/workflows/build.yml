@@ -55,7 +55,7 @@ jobs:
                       target/*/build
                       target/*/deps
                   key: cargo-${{ env.TARGET  }}-${{ env.VARIANT }}-${{ hashFiles('Cargo.lock', 'build.rs', 'git_submodule_status.txt') }}
-                  restore-keys: cargo-
+                  restore-keys: cargo-${{ env.TARGET  }}-${{ env.VARIANT }}-
 
             - name: Build
               run: cargo build -vv --locked ${{ env.CARGO_VARIANT_FLAG }} --target ${{ env.TARGET }}
