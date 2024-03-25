@@ -11,6 +11,8 @@ jobs:
             TARGET: aarch64-linux-android
             VARIANT: release
             CARGO_VARIANT_FLAG: --release
+            LIB_NAME: librusty_v8
+            LIB_EXT: a
 
         steps:
             - name: Checkout To Self Repo
@@ -59,3 +61,9 @@ jobs:
 
             - name: Build
               run: cargo build -vv --locked ${{ env.CARGO_VARIANT_FLAG }} --target ${{ env.TARGET }}
+
+            - name: Release
+              uses: softprops/action-gh-release@v2
+              if: startsWith(github.ref, 'refs/tags/')
+              with:
+                  files: target/${{ env.LIB_NAME }}_${{ env.VARIANT }}_${{ env.TARGET }}.${{ env.LIB_EXT }}.gz
