@@ -8,8 +8,9 @@ jobs:
 
         env:
             V8_FROM_SOURCE: 1
-            CARGO_VARIANT_FLAG: --release
             TARGET: aarch64-linux-android
+            VARIANT: release
+            CARGO_VARIANT_FLAG: --release
 
         steps:
             - name: Checkout To Self Repo
@@ -41,6 +42,20 @@ jobs:
             - name: Install Cross Compilation Toolchain
               run: |
                   rustup target add aarch64-linux-android
+
+            - name: Write git_submodule_status.txt
+              run: git submodule status --recursive > git_submodule_status.txt
+
+            - name: Cache
+              uses: actions/cache@v3
+              with:
+                  path: |-
+                      target/sccache
+                      target/*/.*
+                      target/*/build
+                      target/*/deps
+                  key: cargo-${{ env.TARGET  }}-${{ env.VARIANT }}-${{ hashFiles('Cargo.lock', 'build.rs', 'git_submodule_status.txt') }}
+                  restore-keys: cargo-
 
             - name: Build
               run: cargo build -vv --locked ${{ env.CARGO_VARIANT_FLAG }} --target ${{ env.TARGET }}
