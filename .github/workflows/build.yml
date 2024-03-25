@@ -84,6 +84,11 @@ jobs:
             - name: Build
               run: cargo build -vv --locked ${{ env.CARGO_VARIANT_FLAG }} --target ${{ env.TARGET }}
 
+            - name: Prepare Release
+              run: cp
+                  target/${{ env.TARGET }}/${{ env.VARIANT }}/gn_out/obj/${{ env.LIB_NAME }}.${{ env.LIB_EXT }}
+                  target/${{ env.LIB_NAME }}_${{ env.VARIANT }}_${{ env.TARGET }}.${{ env.LIB_EXT }}
+
             - name: Release
               uses: softprops/action-gh-release@v2
               if: startsWith(github.ref, 'refs/tags/')
