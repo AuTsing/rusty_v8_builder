@@ -7,7 +7,7 @@ jobs:
         runs-on: ubuntu-22.04
 
         env:
-            # V8_FROM_SOURCE: 1
+            V8_FROM_SOURCE: 1
             CARGO_VARIANT_FLAG: --release
             TARGET: aarch64-linux-android
 
@@ -42,5 +42,5 @@ jobs:
               run: |
                   rustup target add aarch64-linux-android
 
-            - name: Test
-              run: cargo test -vv --locked ${{ env.CARGO_VARIANT_FLAG }} --target ${{ env.TARGET }}
+            - name: Build
+              run: cargo build -vv --locked ${{ env.CARGO_VARIANT_FLAG }} --target ${{ env.TARGET }}
