@@ -1,6 +1,6 @@
 # Rusty v8 builder
 
-rusty_v8 version: v0.83.2
+rusty_v8 version: v0.82.0
 
 ## Credits
 
