@@ -9,7 +9,7 @@ jobs:
         env:
             # V8_FROM_SOURCE: 1
             CARGO_VARIANT_FLAG: --release
-            TARGET: x86_64-unknown-linux-gnu
+            TARGET: aarch64-linux-android
 
         steps:
             - name: Checkout To Self Repo
@@ -38,9 +38,9 @@ jobs:
                   python-version: 3.11.x
                   architecture: x64
 
-            - name: Install cross compilation toolchain
+            - name: Install Cross Compilation Toolchain
               run: |
                   rustup target add aarch64-linux-android
 
-            # - name: Test
-            #   run: cargo test -vv --locked ${{ env.CARGO_VARIANT_FLAG }} --target ${{ env.TARGET }}
+            - name: Test
+              run: cargo test -vv --locked ${{ env.CARGO_VARIANT_FLAG }} --target ${{ env.TARGET }}
