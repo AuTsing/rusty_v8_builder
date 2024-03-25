@@ -59,6 +59,28 @@ jobs:
                   key: cargo-${{ env.TARGET  }}-${{ env.VARIANT }}-${{ hashFiles('Cargo.lock', 'build.rs', 'git_submodule_status.txt') }}
                   restore-keys: cargo-${{ env.TARGET  }}-${{ env.VARIANT }}-
 
+            - name: Sccache
+              shell: pwsh
+              env:
+                  SCCACHE_DIR: ${{ github.workspace }}/target/sccache
+                  SCCACHE_CACHE_SIZE: 128M
+                  SCCACHE_IDLE_TIMEOUT: 0
+              run: |
+                  $version = "0.2.12"
+                  $platform =
+                    @{ "macOS"   = "x86_64-apple-darwin"
+                       "Linux"   = "x86_64-unknown-linux-musl"
+                       "Windows" = "x86_64-pc-windows-msvc"
+                     }.${{ runner.os }}
+                  $basename = "sccache-$version-$platform"
+                  $url = "https://github.com/mozilla/sccache/releases/download/" +
+                         "$version/$basename.tar.gz"
+                  cd ~
+                  curl -LO $url
+                  tar -xzvf "$basename.tar.gz"
+                  . $basename/sccache --start-server
+                  echo "$(pwd)/$basename" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+
             - name: Build
               run: cargo build -vv --locked ${{ env.CARGO_VARIANT_FLAG }} --target ${{ env.TARGET }}
 
@@ -66,4 +88,4 @@ jobs:
               uses: softprops/action-gh-release@v2
               if: startsWith(github.ref, 'refs/tags/')
               with:
-                  files: target/${{ env.LIB_NAME }}_${{ env.VARIANT }}_${{ env.TARGET }}.${{ env.LIB_EXT }}.gz
+                  files: target/${{ env.LIB_NAME }}_${{ env.VARIANT }}_${{ env.TARGET }}.${{ env.LIB_EXT }}
