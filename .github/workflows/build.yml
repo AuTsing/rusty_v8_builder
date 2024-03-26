@@ -10,7 +10,7 @@ jobs:
 
         env:
             V8_FROM_SOURCE: 1
-            TARGET: aarch64-linux-android
+            TARGET: x86_64-unknown-linux-gnu
             VARIANT: release
             CARGO_VARIANT_FLAG: --release
             LIB_NAME: librusty_v8
