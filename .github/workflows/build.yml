@@ -2,31 +2,38 @@ name: Build
 
 on:
     push:
-        tags: ["**"]
+        tags: ['**']
 
 jobs:
     build:
+        name: ${{ matrix.config.target }}
         runs-on: ubuntu-22.04
+        timeout-minutes: 180
+        strategy:
+            matrix:
+                config:
+                    - target: x86_64-unknown-linux-gnu
+                      variant: release
+                    - target: aarch64-linux-android
+                      variant: release
 
         env:
             V8_FROM_SOURCE: 1
-            TARGET: x86_64-unknown-linux-gnu
-            VARIANT: release
-            CARGO_VARIANT_FLAG: --release
+            CARGO_VARIANT_FLAG: ${{ matrix.config.variant == 'release' && '--release' || '' }}
             LIB_NAME: librusty_v8
             LIB_EXT: a
 
         steps:
-            - name: Checkout To Self Repo
+            - name: Checkout to rusty_v8_builder
               uses: actions/checkout@v4
 
-            - name: Get Version
+            - name: Get version
               id: get_version
               run: |
                   version=$(cat ./README.md | grep -oP 'v\d+\.\d+\.\d+')
                   echo "version=$version" >> $GITHUB_OUTPUT
 
-            - name: Checkout To V8 Repo
+            - name: Checkout to rusty_v8
               uses: actions/checkout@v4
               with:
                   repository: denoland/rusty_v8
@@ -34,16 +41,17 @@ jobs:
                   fetch-depth: 10
                   submodules: recursive
 
-            - name: Install Rust
+            - name: Install rust
               uses: dsherret/rust-toolchain-file@v1
 
-            - name: Install Python
+            - name: Install python
               uses: actions/setup-python@v4
               with:
                   python-version: 3.11.x
                   architecture: x64
 
-            - name: Install Cross Compilation Toolchain
+            - name: Install cross compilation toolchain
+              if: matrix.config.target == 'aarch64-linux-android'
               run: |
                   rustup target add aarch64-linux-android
 
@@ -58,8 +66,8 @@ jobs:
                       target/*/.*
                       target/*/build
                       target/*/deps
-                  key: cargo-${{ env.TARGET  }}-${{ env.VARIANT }}-${{ hashFiles('Cargo.lock', 'build.rs', 'git_submodule_status.txt') }}
-                  restore-keys: cargo-${{ env.TARGET  }}-${{ env.VARIANT }}-
+                  key: cargo-${{ matrix.config.target }}-${{ matrix.config.variant }}-${{ hashFiles('Cargo.lock', 'build.rs', 'git_submodule_status.txt') }}
+                  restore-keys: cargo-${{ matrix.config.target }}-${{ matrix.config.variant }}-
 
             - name: Sccache
               shell: pwsh
@@ -84,15 +92,15 @@ jobs:
                   echo "$(pwd)/$basename" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
             - name: Build
-              run: cargo build -vv --locked ${{ env.CARGO_VARIANT_FLAG }} --target ${{ env.TARGET }}
+              run: cargo build -vv --locked ${{ env.CARGO_VARIANT_FLAG }} --target ${{ matrix.config.target }}
 
             - name: Prepare Release
               run: cp
-                  target/${{ env.TARGET }}/${{ env.VARIANT }}/gn_out/obj/${{ env.LIB_NAME }}.${{ env.LIB_EXT }}
-                  target/${{ env.LIB_NAME }}_${{ env.VARIANT }}_${{ env.TARGET }}.${{ env.LIB_EXT }}
+                  target/${{ matrix.config.target }}/${{ matrix.config.variant }}/gn_out/obj/${{ env.LIB_NAME }}.${{ env.LIB_EXT }}
+                  target/${{ env.LIB_NAME }}_${{ matrix.config.variant }}_${{ matrix.config.target }}.${{ env.LIB_EXT }}
 
             - name: Release
               uses: softprops/action-gh-release@v2
               if: startsWith(github.ref, 'refs/tags/')
               with:
-                  files: target/${{ env.LIB_NAME }}_${{ env.VARIANT }}_${{ env.TARGET }}.${{ env.LIB_EXT }}
+                  files: target/${{ env.LIB_NAME }}_${{ matrix.config.variant }}_${{ matrix.config.target }}.${{ env.LIB_EXT }}
