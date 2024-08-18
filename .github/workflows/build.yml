@@ -22,6 +22,7 @@ jobs:
             CARGO_VARIANT_FLAG: ${{ matrix.config.variant == 'release' && '--release' || '' }}
             LIB_NAME: librusty_v8
             LIB_EXT: a
+            RUSTFLAGS: -D warnings
 
         steps:
             - name: Checkout to rusty_v8_builder
