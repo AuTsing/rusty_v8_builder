@@ -42,6 +42,11 @@ jobs:
                   fetch-depth: 10
                   submodules: recursive
 
+            - name: Apply patch
+              run: |
+                  wget https://patch-diff.githubusercontent.com/raw/denoland/rusty_v8/pull/1581.patch
+                  git apply 1581.patch
+
             - name: Install rust
               uses: dsherret/rust-toolchain-file@v1
 
