@@ -44,8 +44,8 @@ jobs:
 
             - name: Apply patch
               run: |
-                  wget https://patch-diff.githubusercontent.com/raw/denoland/rusty_v8/pull/1581.patch
-                  git apply 1581.patch
+                  wget https://gist.githubusercontent.com/AuTsing/ac07d741816f485a951ddb1a9b3e45d6/raw/af5cd5d750e9691e822caeb8d608f4b0c7136b86/android.patch
+                  git apply android.patch
 
             - name: Install rust
               uses: dsherret/rust-toolchain-file@v1
