@@ -31,7 +31,7 @@ jobs:
             - name: Get version
               id: get_version
               run: |
-                  version=$(cat ./README.md | grep -oP 'v\d+\.\d+\.\d+')
+                  version=${GITHUB_REF#refs/tags/}
                   echo "version=$version" >> $GITHUB_OUTPUT
 
             - name: Checkout to rusty_v8
