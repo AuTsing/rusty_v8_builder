@@ -42,10 +42,10 @@ jobs:
                   fetch-depth: 10
                   submodules: recursive
 
-            - name: Apply patch
-              run: |
-                  wget https://gist.githubusercontent.com/AuTsing/ac07d741816f485a951ddb1a9b3e45d6/raw/af5cd5d750e9691e822caeb8d608f4b0c7136b86/android.patch
-                  git apply android.patch
+            # - name: Apply patch
+            #   run: |
+            #       wget https://gist.githubusercontent.com/AuTsing/ac07d741816f485a951ddb1a9b3e45d6/raw/af5cd5d750e9691e822caeb8d608f4b0c7136b86/android.patch
+            #       git apply android.patch
 
             - name: Install rust
               uses: dsherret/rust-toolchain-file@v1
