@@ -25,8 +25,10 @@ jobs:
             RUSTFLAGS: -D warnings
 
         steps:
-            - name: Checkout to rusty_v8_builder
+            - name: Checkout rusty_v8_builder
               uses: actions/checkout@v4
+              with:
+                  path: rusty_v8_builder
 
             - name: Get version
               id: get_version
@@ -34,18 +36,19 @@ jobs:
                   version=${GITHUB_REF#refs/tags/}
                   echo "version=$version" >> $GITHUB_OUTPUT
 
-            - name: Checkout to rusty_v8
+            - name: Checkout rusty_v8
               uses: actions/checkout@v4
               with:
                   repository: denoland/rusty_v8
                   ref: ${{ steps.get_version.outputs.version }}
                   fetch-depth: 10
                   submodules: recursive
+                  path: rusty_v8
 
-            # - name: Apply patch
-            #   run: |
-            #       wget https://gist.githubusercontent.com/AuTsing/ac07d741816f485a951ddb1a9b3e45d6/raw/af5cd5d750e9691e822caeb8d608f4b0c7136b86/android.patch
-            #       git apply android.patch
+            - name: Apply patch
+              run: |
+                  cd rusty_v8
+                  git apply ../rusty_v8_builder/patches/${{ steps.get_version.outputs.version }}.patch
 
             - name: Install rust
               uses: dsherret/rust-toolchain-file@v1

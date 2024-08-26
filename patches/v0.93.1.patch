@@ -1,0 +1,11 @@
+diff --git a/.gn b/.gn
+index b90b382..06786da 100644
+--- a/.gn
++++ b/.gn
+@@ -81,4 +81,6 @@ default_args = {
+ 
+   # Enable Deno-specific extra bindings
+   deno_enable_extras = true
++
++  use_relative_vtables_abi = false
+ }
