@@ -44,7 +44,19 @@ jobs:
               with:
                   path: rusty_v8_builder
 
+            - name: Check patch available
+              id: check_patch_available
+              run: |
+                  if [ -f "rusty_v8_builder/patches/${{ steps.get_version.outputs.version }}.patch" ]; then
+                    echo "Patch ${{ steps.get_version.outputs.version }}.patch available"
+                    echo "patch_available=true" >> $GITHUB_OUTPUT
+                  else
+                    echo "Patch ${{ steps.get_version.outputs.version }}.patch not found"
+                    echo "patch_available=false" >> $GITHUB_OUTPUT
+                  fi
+
             - name: Apply patch
+              if: steps.check_patch_available.outputs.patch_available == 'true'
               run: |
                   git apply rusty_v8_builder/patches/${{ steps.get_version.outputs.version }}.patch
 
