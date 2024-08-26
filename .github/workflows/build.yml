@@ -25,11 +25,6 @@ jobs:
             RUSTFLAGS: -D warnings
 
         steps:
-            - name: Checkout rusty_v8_builder
-              uses: actions/checkout@v4
-              with:
-                  path: rusty_v8_builder
-
             - name: Get version
               id: get_version
               run: |
@@ -43,12 +38,15 @@ jobs:
                   ref: ${{ steps.get_version.outputs.version }}
                   fetch-depth: 10
                   submodules: recursive
-                  path: rusty_v8
+
+            - name: Checkout rusty_v8_builder
+              uses: actions/checkout@v4
+              with:
+                  path: rusty_v8_builder
 
             - name: Apply patch
               run: |
-                  cd rusty_v8
-                  git apply ../rusty_v8_builder/patches/${{ steps.get_version.outputs.version }}.patch
+                  git apply rusty_v8_builder/patches/${{ steps.get_version.outputs.version }}.patch
 
             - name: Install rust
               uses: dsherret/rust-toolchain-file@v1
