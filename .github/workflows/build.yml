@@ -111,6 +111,10 @@ jobs:
                   echo "$(pwd)/$basename" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
             - name: Build
+              env:
+                  CROSS_SYSROOT: '${{ github.workspace }}/third_party/android_ndk/toolchains/llvm/prebuilt/linux-x86_64/sysroot'
+                  BINDGEN_EXTRA_CLANG_ARGS_aarch64_linux_android: '--sysroot=${{env.CROSS_SYSROOT}}'
+                  DEP_Z_INCLUDE: '${{env.CROSS_SYSROOT}}/usr/include'
               run: cargo build -vv --locked ${{ env.CARGO_VARIANT_FLAG }} --target ${{ matrix.config.target }}
 
             - name: Prepare Release
