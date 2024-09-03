@@ -114,7 +114,9 @@ jobs:
               env:
                   BINDGEN_EXTRA_CLANG_ARGS_aarch64_linux_android: '--sysroot=${{ github.workspace }}/third_party/android_ndk/toolchains/llvm/prebuilt/linux-x86_64/sysroot'
                   DEP_Z_INCLUDE: '${{ github.workspace }}/third_party/android_ndk/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include'
-              run: cargo build -vv --locked ${{ env.CARGO_VARIANT_FLAG }} --target ${{ matrix.config.target }}
+              run: |
+                  ls $BINDGEN_EXTRA_CLANG_ARGS_aarch64_linux_android
+                  cargo build -vv --locked ${{ env.CARGO_VARIANT_FLAG }} --target ${{ matrix.config.target }}
 
             - name: Prepare Release
               run: gzip -9c
