@@ -115,7 +115,7 @@ jobs:
                   BINDGEN_EXTRA_CLANG_ARGS_aarch64_linux_android: '--sysroot=${{ github.workspace }}/third_party/android_ndk/toolchains/llvm/prebuilt/linux-x86_64/sysroot'
                   DEP_Z_INCLUDE: '${{ github.workspace }}/third_party/android_ndk/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include'
               run: |
-                  ls $BINDGEN_EXTRA_CLANG_ARGS_aarch64_linux_android
+                  ls /home/runner/work/rusty_v8_builder/rusty_v8_builder/third_party/android_ndk/toolchains/llvm/prebuilt/linux-x86_64/sysroot
                   cargo build -vv --locked ${{ env.CARGO_VARIANT_FLAG }} --target ${{ matrix.config.target }}
 
             - name: Prepare Release
