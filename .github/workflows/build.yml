@@ -124,7 +124,7 @@ jobs:
               run: |
                   echo "LLVM_CONFIG_PATH=${{ github.workspace }}/third_party/android_ndk/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-config" >> $GITHUB_ENV
                   echo "LIBCLANG_PATH=${{ github.workspace }}/third_party/android_ndk/toolchains/llvm/prebuilt/linux-x86_64/lib" >> $GITHUB_ENV
-                  echo "BINDGEN_EXTRA_CLANG_ARGS_aarch64_linux_android='--sysroot=${{ github.workspace }}/third_party/android_ndk/toolchains/llvm/prebuilt/linux-x86_64/sysroot'"
+                  echo "BINDGEN_EXTRA_CLANG_ARGS_aarch64_linux_android='--sysroot=${{ github.workspace }}/third_party/android_ndk/toolchains/llvm/prebuilt/linux-x86_64/sysroot'" >> $GITHUB_ENV
 
             - name: Build
               run: |
