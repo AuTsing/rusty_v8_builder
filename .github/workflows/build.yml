@@ -7,7 +7,7 @@ on:
 jobs:
     build:
         name: ${{ matrix.config.target }}
-        runs-on: ubuntu-22.04-xl
+        runs-on: ubuntu-22.04
         timeout-minutes: 180
         strategy:
             matrix:
@@ -73,6 +73,14 @@ jobs:
               if: matrix.config.target == 'aarch64-linux-android'
               run: |
                   rustup target add aarch64-linux-android
+
+            - name: Install denps
+              run: |
+                  wget https://apt.llvm.org/llvm.sh
+                  chmod +x llvm.sh
+                  sudo ./llvm.sh 17
+
+                  sudo apt install --install-recommends -y cmake libglib2.0-dev protobuf-compiler
 
             - name: Write git_submodule_status.txt
               run: git submodule status --recursive > git_submodule_status.txt
