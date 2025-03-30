@@ -80,6 +80,7 @@ jobs:
                   chmod +x llvm.sh
                   sudo ./llvm.sh 17
 
+                  sudo apt update
                   sudo apt install --install-recommends -y cmake libglib2.0-dev protobuf-compiler
 
             - name: Write git_submodule_status.txt
@@ -118,12 +119,14 @@ jobs:
                   . $basename/sccache --start-server
                   echo "$(pwd)/$basename" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
+            - name: Setup environment
+              if: matrix.config.target == 'aarch64-linux-android'
+              run: |
+                  echo "LLVM_CONFIG_PATH=${{ github.workspace }}/third_party/android_ndk/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-config" >> $GITHUB_ENV
+                  echo "LIBCLANG_PATH=${{ github.workspace }}/third_party/android_ndk/toolchains/llvm/prebuilt/linux-x86_64/lib" >> $GITHUB_ENV
+                  echo "BINDGEN_EXTRA_CLANG_ARGS_aarch64_linux_android='--sysroot=${{ github.workspace }}/third_party/android_ndk/toolchains/llvm/prebuilt/linux-x86_64/sysroot'"
+
             - name: Build
-              env:
-                  NDK_ROOT: '${{ github.workspace }}/third_party/android_ndk'
-                  LLVM_CONFIG_PATH: ${{ matrix.config.target == 'aarch64-linux-android' && format(env.NDK_ROOT, 'toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-config') || '' }}
-                  LIBCLANG_PATH: ${{ matrix.config.target == 'aarch64-linux-android' && format(env.NDK_ROOT, 'toolchains/llvm/prebuilt/linux-x86_64/lib') || '' }}
-                  BINDGEN_EXTRA_CLANG_ARGS_aarch64_linux_android: '--sysroot=${{ env.NDK_ROOT }}/toolchains/llvm/prebuilt/linux-x86_64/sysroot'
               run: |
                   cargo build -vv --locked ${{ env.CARGO_VARIANT_FLAG }} --target ${{ matrix.config.target }}
 
