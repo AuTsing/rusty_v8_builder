@@ -127,6 +127,7 @@ jobs:
                   LIBCLANG_PATH=$NDK_ROOT/toolchains/llvm/prebuilt/linux-x86_64/lib
                   BINDGEN_EXTRA_CLANG_ARGS_aarch64_linux_android="--sysroot=$NDK_ROOT/toolchains/llvm/prebuilt/linux-x86_64/sysroot"
                   GN_ARGS="sysroot=\"$NDK_ROOT/toolchains/llvm/prebuilt/linux-x86_64/sysroot\""
+                  CPATH=$NDK_ROOT/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/include/aarch64-linux-android
                   echo "LLVM_CONFIG_PATH=$LLVM_CONFIG_PATH" >> $GITHUB_ENV
                   echo "LIBCLANG_PATH=$LIBCLANG_PATH" >> $GITHUB_ENV
                   echo "BINDGEN_EXTRA_CLANG_ARGS_aarch64_linux_android=$BINDGEN_EXTRA_CLANG_ARGS_aarch64_linux_android" >> $GITHUB_ENV
