@@ -142,7 +142,9 @@ jobs:
               uses: softprops/action-gh-release@v2
               if: startsWith(github.ref, 'refs/tags/')
               with:
-                  files: target/${{ env.LIB_NAME }}_${{ matrix.config.variant }}_${{ matrix.config.target }}.${{ env.LIB_EXT }}.gz
+                  files: |
+                      target/${{ env.LIB_NAME }}_${{ matrix.config.variant }}_${{ matrix.config.target }}.${{ env.LIB_EXT }}.gz
+                      target/src_binding_${{ matrix.config.variant }}_${{ matrix.config.target }}.rs
 
             - name: Upload artifacts
               uses: actions/upload-artifact@v4
