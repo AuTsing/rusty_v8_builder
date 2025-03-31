@@ -122,10 +122,15 @@ jobs:
             - name: Setup environment
               if: matrix.config.target == 'aarch64-linux-android'
               run: |
-                  echo "LLVM_CONFIG_PATH=${{ github.workspace }}/third_party/android_ndk/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-config" >> $GITHUB_ENV
-                  echo "LIBCLANG_PATH=${{ github.workspace }}/third_party/android_ndk/toolchains/llvm/prebuilt/linux-x86_64/lib" >> $GITHUB_ENV
-                  echo "BINDGEN_EXTRA_CLANG_ARGS_aarch64_linux_android='--sysroot=${{ github.workspace }}/third_party/android_ndk/toolchains/llvm/prebuilt/linux-x86_64/sysroot'" >> $GITHUB_ENV
-                  echo "GN_ARGS='sysroot=\"${{ github.workspace }}/third_party/android_ndk/toolchains/llvm/prebuilt/linux-x86_64/sysroot\"'" >> $GITHUB_ENV
+                  NDK_ROOT=${{ github.workspace }}/third_party/android_ndk
+                  LLVM_CONFIG_PATH=$NDK_ROOT/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-config
+                  LIBCLANG_PATH=$NDK_ROOT/toolchains/llvm/prebuilt/linux-x86_64/lib
+                  BINDGEN_EXTRA_CLANG_ARGS_aarch64_linux_android="--sysroot=$NDK_ROOT/toolchains/llvm/prebuilt/linux-x86_64/sysroot"
+                  GN_ARGS="sysroot=\"$NDK_ROOT/toolchains/llvm/prebuilt/linux-x86_64/sysroot\""
+                  echo "LLVM_CONFIG_PATH=$LLVM_CONFIG_PATH" >> $GITHUB_ENV
+                  echo "LIBCLANG_PATH=$LIBCLANG_PATH" >> $GITHUB_ENV
+                  echo "BINDGEN_EXTRA_CLANG_ARGS_aarch64_linux_android=$BINDGEN_EXTRA_CLANG_ARGS_aarch64_linux_android" >> $GITHUB_ENV
+                  echo "GN_ARGS=$GN_ARGS" >> $GITHUB_ENV
 
             - name: Build
               run: |
